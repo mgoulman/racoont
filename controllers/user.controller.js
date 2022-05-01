@@ -1,5 +1,6 @@
 const UserModel = require("../model/user.model");
-const ObjectId = require("mongoose").Types.ObjectId;
+const ObjectID = require("mongoose").Types.ObjectId;
+
 
 module.exports.getAllUsers = async (req, res) => {
   const users = await UserModel.find().select("-password");
@@ -7,17 +8,18 @@ module.exports.getAllUsers = async (req, res) => {
 };
 
 module.exports.userInfo = (req, res) => {
-  if (!ObjectId.isValid(req.params.id))
-    return res.status(400).send("id unknown:" + req.params.id);
+   if (!ObjectID.isValid(req.params.id))
+     return res.status(400).send("ID unknown : " + req.params.id);
+  console.log(req.params.id)
 
-  UserModel.findById(req.params.id, (err, docs) => {
-    if (!err) res.send(docs);
-    else console.log("ID unknown : " + err);
-  }).select("-password");
+   UserModel.findById(req.params.id, (err, docs) => {
+     if (!err) res.send(docs);
+     else console.log("ID unknown : " + err);
+   }).select("-password");
 };
 
 module.exports.updateUser = (req, res) => {
-  if (!ObjectId.isValid(req.params.id))
+  if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
@@ -40,7 +42,7 @@ module.exports.updateUser = (req, res) => {
 };
 
 module.exports.deleteUser = async (req, res) => {
-  if (!ObjectId.isValid(req.params.id))
+  if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
@@ -52,7 +54,7 @@ module.exports.deleteUser = async (req, res) => {
 };
 
 module.exports.follow = (req, res) => {
-  if (!ObjectId.isValid(req.params.id) || !ObjectId.isValid(req.body.idTofollow))
+  if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.idTofollow))
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
@@ -81,7 +83,7 @@ module.exports.follow = (req, res) => {
 };
 
 module.exports.unfollow = (req, res) => {
-  if (!ObjectId.isValid(req.params.id) || !ObjectId.isValid(req.body.idToUnfollow) )
+  if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.idToUnfollow) )
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {

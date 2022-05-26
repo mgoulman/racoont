@@ -27,9 +27,40 @@ module.exports.createPost = async (req, res) => {
 };
 
 module.exports.updatePost = (req, res) => {
+    if (!ObjectId.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+    const updatedMessage = {
+        message: req.body.message,
+    }
+
+    PostModel.findByIdAndUpdate(
+        req.params.id,
+        {$set: updatedMessage},
+        {new: true},
+        (err, docs) => {
+            if(!err) res.send(docs)
+            else console.log("Update err :" + err);
+        }
+    )
+    
+};
+
+module.exports.deletePost = async (req, res) => {
+    if (!ObjectId.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+
+    await PostModel.findByIdAndDelete(req.params.id, (err, docs) => {
+        if(!err) res.send(docs)
+        else console.log("Update err :" + err);
+    })
 
 };
 
-module.exports.deletePost = (req, res) => {
+module.exports.likePost = (req, res) => {
 
 };
+
+module.exports.unlikePost = (req, res) => {
+    
+}

@@ -21,11 +21,12 @@ module.exports.uploadProfile = async (req, res) => {
   }
 
   const fileName = req.body.name + ".jpg";
+  console.log("name ====> : ", fileName);
 
   await pipeline(
       req.file.stream,
       fs.createWriteStream(
-          `${__dirname}/client/public/upload/profile/${fileName}`
+          `${__dirname}/../client/public/upload/profile/${fileName}`
       )
   )
 };

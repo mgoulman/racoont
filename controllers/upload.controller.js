@@ -13,20 +13,29 @@ module.exports.uploadProfile = async (req, res) => {
     )
       throw Error("invalid file");
 
-      if (req.file.size > 500000) 
-      throw Error("max size reached")
-  } catch (err) {
-      const errors = uploadErrors(err)
-      return res.status(201).json({errors})
-  }
+    if (req.file.size > 500000) throw Error("max size reached");
+  // } catch (err) {
+  //   const errors = uploadErrors(err);
+  //   return res.status(201).json({ errors });
+  // }
 
   const fileName = req.body.name + ".jpg";
   console.log("name ====> : ", fileName);
 
   await pipeline(
-      req.file.stream,
-      fs.createWriteStream(
-          `${__dirname}/../client/public/upload/profile/${fileName}`
-      )
-  )
+    req.file.stream,
+    fs.createWriteStream(
+      `${__dirname}/../client/public/upload/profile/${fileName}`
+    )
+  );
+    const result = await UserModel.findByIdAndUpdate(
+      req.body.userId,
+      { $set: { picture: "./upload/profile/" + fileName } },
+      { new: true, upsert: true, setDefaultsOnInsert: true },
+    );
+    return res.send(result)
+  } catch (err) {
+    return res.status(500).send({ message: err });
+    
+  }
 };

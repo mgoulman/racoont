@@ -1,6 +1,10 @@
 const PostModel = require("../model/post.model");
 const UserModel = require("../model/user.model");
 const ObjectId = require("mongoose").Types.ObjectId;
+const fs = require("fs");
+const { promisify } = require("util");
+const { uploadErrors } = require("../utils/errors.utils");
+const pipeline = promisify(require("stream").pipeline);
 
 module.exports.readPost = (req, res) => {
   PostModel.find((err, docs) => {
@@ -10,9 +14,36 @@ module.exports.readPost = (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
+  let fileName;
+
+  if (req.file !== null) {
+    try {
+      if (
+        req.file.detectedMimeType !== "image/jpg" &&
+        req.file.detectedMimeType !== "image/jpeg" &&
+        req.file.detectedMimeType !== "image/png"
+      )
+        throw Error("invalid file");
+
+      if (req.file.size > 500000) throw Error("max size reached");
+    } catch (err) {
+      const errors = uploadErrors(err);
+      return res.status(201).json({ errors });
+    }
+
+    fileName = req.body.posterId + Date.now() + ".jpg";
+    await pipeline(
+      req.file.stream,
+      fs.createWriteStream(
+        `${__dirname}/../client/public/upload/posts/${fileName}`
+      )
+    );
+  }
+
   const newPost = new PostModel({
     posterId: req.body.posterId,
     message: req.body.message,
+    picture: req.file !== null ? "./upload/posts/" + fileName : "",
     video: req.body.video,
     likers: [],
     comments: [],
@@ -169,26 +200,26 @@ module.exports.editCommentPost = (req, res) => {
 };
 
 module.exports.deleteCommentPost = (req, res) => {
-    if (!ObjectId.isValid(req.params.id))
+  if (!ObjectId.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
-    try {
-        return PostModel.findByIdAndUpdate(
-            req.params.id,
-            {
-                $pull : {
-                    comments: {
-                        _id: req.body.commentId
-                    }
-                }
-            }, 
-            {new: true},
-            (err, docs) => {
-                if (!err) return res.send(docs)
-                else return res.status(400).send(err)
-            }
-        )
-    } catch (err) {
-        return res.status(400).send(err)
-    }
+  try {
+    return PostModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: {
+          comments: {
+            _id: req.body.commentId,
+          },
+        },
+      },
+      { new: true },
+      (err, docs) => {
+        if (!err) return res.send(docs);
+        else return res.status(400).send(err);
+      }
+    );
+  } catch (err) {
+    return res.status(400).send(err);
+  }
 };

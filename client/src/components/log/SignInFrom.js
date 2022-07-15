@@ -11,7 +11,7 @@ function SignInFrom() {
     const passwordError = document.querySelector('.password.error');
 
     axios({
-      methode: "post",
+      method: "post",
       url: `${process.env.REACT_APP_API_URL}api/user/login`,
       withCredentials: true,
       data: {
@@ -27,7 +27,7 @@ function SignInFrom() {
       }
     }).catch (err => {
       console.log(err);
-    })
+    })  
   };
 
   return (
@@ -62,3 +62,4 @@ function SignInFrom() {
 }
 
 export default SignInFrom;
+  

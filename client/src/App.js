@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Routes from "./components/Routes";
 import { UidContext } from './components/AppContext';
 import axios from 'axios';
+import Navbar from './components/Navbar';
 
 const App = () => {
   const [uid, setUid] = useState(null);
@@ -20,7 +21,8 @@ const App = () => {
   }, [uid]) 
 
   return (
-    <UidContext.Provider value={uid}> 
+    <UidContext.Provider value={uid}>
+      <Navbar />
       <Routes />
     </UidContext.Provider>
   )

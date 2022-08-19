@@ -1,20 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import LeftNav from "../LeftNav";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UploadImg from "./UploadImg";
+import { updateBio } from "../../actions/user.actions";
 
 const UpdateProfile = () => {
+  const [bio, setBio] = useState('');
+  const [updateForm, setUpdateForm] = useState(false);
   const userData = useSelector((state) => state.userReducer);
+  const dispatch = useDispatch();
+
+  const handleUpdate = () => {
+    setUpdateForm(false)
+    dispatch(updateBio(userData._id, bio))
+  }
 
   return (
     <div className="profil-container">
       <LeftNav />
-      <h1>Profil de {userData.peudo}</h1>
+      <h1>Profil de {userData.pseudo}</h1>
       <div className="update-container">
         <div className="left-part">
           <h3>Photo De profil</h3>
           <img src={userData.picture} alt="user-pic" />
           <UploadImg />
+        </div>
+        <div className="right-part">
+          <div className="bio-update">
+            <h3>Bio</h3>
+            {updateForm === false && (
+              <>
+                <p onClick={() => setUpdateForm(!updateForm)}>{userData.bio}</p>
+                <button onClick={() => setUpdateForm(!updateForm)}>Modifier Bio</button>
+              </>
+            )}
+            {updateForm && (
+              <>
+                <textarea type="text" defaultValue={userData.bio} onChange={(e) => setBio(e.target.value)}></textarea>
+                <button onClick={handleUpdate}>Valider Modifications</button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

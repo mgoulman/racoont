@@ -3,6 +3,7 @@ import { GET_USER, UPLOAD_PICTURE, UPDATE_BIO, FOLLOW_USER } from "../actions/us
 const initialState = {};
 
 export default function userReducer(state = initialState, action) {
+  console.log("Reducer ==>", action.payload);
   switch (action.type) {
     case GET_USER:
       return action.payload;
@@ -19,7 +20,7 @@ export default function userReducer(state = initialState, action) {
     case FOLLOW_USER:
       return {
         ...state,
-        following: [action.payload.following, ...state.following]
+        following: [action.payload, ...state.following]
       };
     default:
       return state;

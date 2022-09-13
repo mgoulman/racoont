@@ -54,8 +54,8 @@ module.exports.deleteUser = async (req, res) => {
 };
 
 module.exports.follow = (req, res) => {
-  if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.idTofollow))
-    return res.status(400).send("ID unknown : " + req.params.id);
+  // if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.idTofollow))
+  //   return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
     // add to the follower list

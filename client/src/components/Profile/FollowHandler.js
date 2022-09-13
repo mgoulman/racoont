@@ -6,16 +6,15 @@ import { isEmpty } from "../Utils";
 export default function FollowHandler({ idToFollow }) {
   const userData = useSelector((state) => state.userReducer);
   const [isFollow, setIsFollow] = useState(false);
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleFollow = () => {
     setIsFollow(true);
-    dispatch(followUser(userData._id, idToFollow))
-
+    dispatch(followUser(userData._id, idToFollow));
   };
 
   const handleUnfollow = () => {
-    setIsFollow(false)
+    setIsFollow(false);
   };
 
   useEffect(() => {

@@ -46,9 +46,11 @@ export const updateBio = (userId, bio) => {
 };
 
 export const followUser = (followerId, idToFollow) => {
+    console.log("in action:/n", "followerId : ", followerId, "idToFollow : ", idToFollow);
+
   return (dispatch) => {
     return axios({
-      methode: "patch",
+      method: "patch",
       url: `${process.env.REACT_APP_API_URL}api/user/follow/` + followerId,
       data: {idToFollow}
     })

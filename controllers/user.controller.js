@@ -1,21 +1,20 @@
 const UserModel = require("../model/user.model");
 const ObjectID = require("mongoose").Types.ObjectId;
 
-
 module.exports.getAllUsers = async (req, res) => {
   const users = await UserModel.find().select("-password");
   res.status(200).json(users);
 };
 
 module.exports.userInfo = (req, res) => {
-   if (!ObjectID.isValid(req.params.id))
-     return res.status(400).send("ID unknown : " + req.params.id);
-  console.log(req.params.id)
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID unknown : " + req.params.id);
+  console.log(req.params.id);
 
-   UserModel.findById(req.params.id, (err, docs) => {
-     if (!err) res.send(docs);
-     else console.log("ID unknown : " + err);
-   }).select("-password");
+  UserModel.findById(req.params.id, (err, docs) => {
+    if (!err) res.send(docs);
+    else console.log("ID unknown : " + err);
+  }).select("-password");
 };
 
 module.exports.updateUser = (req, res) => {
@@ -54,14 +53,18 @@ module.exports.deleteUser = async (req, res) => {
 };
 
 module.exports.follow = (req, res) => {
-  // if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.idTofollow))
-  //   return res.status(400).send("ID unknown : " + req.params.id);
+  console.log("req===>", req.body);
+  if (
+    !ObjectID.isValid(req.params.id) ||
+    !ObjectID.isValid(req.body.idToFollow)
+  )
+    return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
     // add to the follower list
     UserModel.findByIdAndUpdate(
       req.params.id,
-      { $addToSet: { following: req.body.idTofollow } },
+      { $addToSet: { following: req.body.idToFollow } },
       { new: true, upsert: true },
       (err, docs) => {
         if (!err) res.status(201).json(docs);
@@ -70,7 +73,7 @@ module.exports.follow = (req, res) => {
     );
     // add to the following list
     UserModel.findByIdAndUpdate(
-      req.body.idTofollow,
+      req.body.idToFollow,
       { $addToSet: { followers: req.params.id } },
       { new: true, upsert: true },
       (err, docs) => {
@@ -83,7 +86,10 @@ module.exports.follow = (req, res) => {
 };
 
 module.exports.unfollow = (req, res) => {
-  if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.idToUnfollow) )
+  if (
+    !ObjectID.isValid(req.params.id) ||
+    !ObjectID.isValid(req.body.idToUnfollow)
+  )
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {

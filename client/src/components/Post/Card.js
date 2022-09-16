@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import FollowHandler from "../Profile/FollowHandler";
 import { isEmpty, parseDate } from "../Utils";
 
 export default function Card({ post }) {
@@ -35,17 +36,43 @@ export default function Card({ post }) {
           <div className="card-right">
             <div className="card-header">
               <div className="pseudo">
-                <h3>{
-                    !isEmpty(usersData[0]) &&
-                    usersData
-                      .map((user) => {
-                        if (user._id === post.posterId) return user.pseudo;
-                        else return null;
-                      })
-                  }</h3>
+                <h3>
+                  {!isEmpty(usersData[0]) &&
+                    usersData.map((user) => {
+                      if (user._id === post.posterId) return user.pseudo;
+                      else return null;
+                    })}
+                </h3>
+                {post.posterId !== userData._id && (
+                  <FollowHandler idToFollow={post.posterId} type={"card"} />
+                )}
               </div>
               <span>{parseDate(post.createdAt)}</span>
             </div>
+            <p>{post.message}</p>
+            {post.picture && (
+              <img src={post.picture} alt="card-pic" className="card-pic" />
+            )}
+            {post.video && (
+              <iframe
+                width="500"
+                height="300"
+                src={post.video}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={post._id}
+              ></iframe>
+            )}
+            <div className="card-footer">
+              <div className="comment-icon">
+                <img src="./img/icons/message1.svg" alt="comment"/>
+                <span>{post.comments.length}</span>
+              </div>
+               <h6>like button</h6>
+               <img src="./img/icons/share.svg" alt="share"/>
+            </div>
+            {}
           </div>
         </>
       )}

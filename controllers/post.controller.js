@@ -87,8 +87,9 @@ module.exports.deletePost = async (req, res) => {
 };
 
 module.exports.likePost = async (req, res) => {
-  if (!ObjectId.isValid(req.params.id))
-    return res.status(400).send("ID unknown : " + req.params.id);
+  console.log("i'm her == >", req.body);
+  if (!ObjectId.isValid(req.params.id)){
+    return res.status(400).send("ID unknown : " + req.params.id);}
 
   try {
     await PostModel.findByIdAndUpdate(

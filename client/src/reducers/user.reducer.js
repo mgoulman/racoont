@@ -32,7 +32,7 @@ export default function userReducer(state = initialState, action) {
         ...state,
         following: state.following.filter(
           (id) => id !== action.payload.idToUnfollow
-        ),  
+        ),
       };
     default:
       return state;

@@ -17,29 +17,29 @@ export const getPosts = () => {
   };
 };
 
-export const likePost = (id, postId) => {
+export const likePost = (postId, userId) => {
   return (dispatch) => {
     return axios({
       method: "patch",
       url: `${process.env.REACT_APP_API_URL}api/post/like-post/` + postId,
-      data: { id },
+      data: { id: userId },
     })
-      .the((res) => {
-        dispatch({ type: LIKE_POST, payload: id });
+      .then((res) => {
+        dispatch({ type: LIKE_POST, payload: { postId, userId } });
       })
       .catch((err) => console.log(err));
   };
 };
 
-export const unLikePost = (id, postId) => {
+export const unlikePost = (postId, userId) => {
   return (dispatch) => {
     return axios({
       method: "patch",
       url: `${process.env.REACT_APP_API_URL}api/post/unlike-post/` + postId,
-      data: { id },
+      data: { id: userId },
     })
       .then((res) => {
-        dispatch({ ttype: UNLIKE_POST, payload: id });
+        dispatch({ type: UNLIKE_POST, payload: { postId, userId } });
       })
       .catch((err) => console.log(err));
   };

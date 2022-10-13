@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import FollowHandler from "../Profile/FollowHandler";
 import { isEmpty, parseDate } from "../Utils";
 import LikeButton from "./LikeButton";
+import {updatePost} from "../../actions/post.actions"
+ 
 
 export default function Card({ post }) {
   const [isLoading, setIsLoading] = useState(true);
   const usersData = useSelector((state) => state.usersReducer);
   const userData = useSelector((state) => state.userReducer);
+  const [isUpdated, setIsUpdated] = useState(false);
+  const [textUpdate, setTextUpdate] = useState(null);
+  const dispatch= useDispatch();
+
+  const updateItem = () => {
+    if (textUpdate) {
+      dispatch(updatePost(post._id, textUpdate));
+    }
+    setIsUpdated(false);
+  };
 
   useEffect(() => {
     !isEmpty(usersData[0]) && setIsLoading(false);
@@ -49,7 +61,20 @@ export default function Card({ post }) {
               </div>
               <span>{parseDate(post.createdAt)}</span>
             </div>
-            <p>{post.message}</p>
+            {isUpdated === false && <p>{post.message}</p>}
+            {isUpdated && (
+              <div className="update-post">
+                <textarea
+                  defaultValue={post.message}
+                  onChange={(e) => setTextUpdate(e.target.value)}
+                />
+                <div className="button-container">
+                  <button className="btn" onClick={updateItem}>
+                    Valider Modification
+                  </button>
+                </div>
+              </div>
+            )}
             {post.picture && (
               <img src={post.picture} alt="card-pic" className="card-pic" />
             )}
@@ -66,11 +91,11 @@ export default function Card({ post }) {
             )}
             <div className="card-footer">
               <div className="comment-icon">
-                <img src="./img/icons/message1.svg" alt="comment"/>
+                <img src="./img/icons/message1.svg" alt="comment" />
                 <span>{post.comments.length}</span>
               </div>
-               <LikeButton post={post}/>
-               <img src="./img/icons/share.svg" alt="share"/>
+              <LikeButton post={post} />
+              <img src="./img/icons/share.svg" alt="share" />
             </div>
             {}
           </div>

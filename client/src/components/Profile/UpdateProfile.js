@@ -77,12 +77,16 @@ const UpdateProfile = () => {
                         <img src={user.picture} alt="user_pic" />
                         <h4>{user.pseudo}</h4>
                         <div className="follow-handler">
-                          <FollowHandler idToFollow={user._id} type={'suggestion'}/>
+                          <FollowHandler
+                            idToFollow={user._id}
+                            type={"suggestion"}
+                          />
                         </div>
                       </li>
                     );
                   }
                 }
+                return null;
               })}
             </ul>
           </div>
@@ -104,12 +108,16 @@ const UpdateProfile = () => {
                         <img src={user.picture} alt="user_pic" />
                         <h4>{user.pseudo}</h4>
                         <div className="follow-handler">
-                          <FollowHandler idToFollow={user._id} type={'suggestion'}/>
+                          <FollowHandler
+                            idToFollow={user._id}
+                            type={"suggestion"}
+                          />
                         </div>
                       </li>
                     );
                   }
                 }
+                return null;
               })}
             </ul>
           </div>

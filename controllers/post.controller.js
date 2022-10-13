@@ -98,7 +98,6 @@ module.exports.likePost = async (req, res) => {
         $addToSet: { likers: req.body.id },
       },
       { new: true })
-      .then((data) => res.send(data))
       .catch((err) => res.status(500).send({ message: err }));
 
     await UserModel.findByIdAndUpdate(
@@ -134,7 +133,6 @@ module.exports.unlikePost = async (req, res) => {
         $pull: { likes: req.params.id },
       },
       { new: true })
-            .then((data) => res.send(data))
             .catch((err) => res.status(500).send({ message: err }));
     } catch (err) {
         return res.status(400).send(err);

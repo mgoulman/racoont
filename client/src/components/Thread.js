@@ -8,7 +8,6 @@ export default function Thread() {
   const [loadPost, setLadPost] = useState(true);
   const [count, setCount] = useState(5)
   const dispatch = useDispatch();
-  const [count, setCount] = useState(5)
   const posts = useSelector((state) => state.postReducer);
 
 
